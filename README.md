@@ -18,6 +18,8 @@ The MPU6050 sensor provides 6 degrees of freedom (6DOF) motion tracking. This al
 - Accurate hand position and orientation in 3D space
 - Real-time motion data for responsive VR interactions
 
+![MPU6050](Images/MPU6050.jpeg)
+
 ### Finger Tracking
 
 Initially focusing on a single finger:
@@ -28,6 +30,8 @@ Initially focusing on a single finger:
 Electrostatic braking strips are the core of the force feedback system:
 - Apply variable friction to finger movement
 - Create a sense of resistance when interacting with virtual objects
+
+![Electrostatic Brake](Images/brake.jpeg)
 
 #### How Electrostatic Braking Works
 
