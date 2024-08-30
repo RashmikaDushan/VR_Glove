@@ -13,8 +13,7 @@ ax.set_zlim(0,10)
 
 def animate(i): # function to animate the plot
     global accelGyro
-    print(accelGyro)
-    ReadData() # update data
+    accelGyro = ReadData() # update data
     ax.clear()
     ax.set_xlim(0,10)
     ax.set_ylim(0,10)
@@ -25,8 +24,8 @@ def animate(i): # function to animate the plot
 def ReadData(): # dummy read data function
     global accelGyro
     offset = np.random.uniform(-0.5, 0.5, 6)
-    accelGyro = (accelGyro + offset)%10
-    print(accelGyro)
+    data = (accelGyro + offset)%10
+    return data
 
 ani = mpl_animation.FuncAnimation(fig,animate, interval=1000/60) # animate the plot forever
 
