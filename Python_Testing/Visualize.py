@@ -9,14 +9,18 @@ accelGyro = np.array([0.1, 0.5, 0.3, 0.4, 0.5, 0.6])
 fig = plt.figure(figsize=(10, 7))
 ax = fig.add_subplot(111, projection='3d')
 
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 10)
+ax.set_xlim(0,10)
+ax.set_ylim(0,10)
+ax.set_zlim(0,10)
 
 def animate(i):
     global accelGyro
     print(accelGyro)
     ReadData()
     ax.clear()
+    ax.set_xlim(0,10)
+    ax.set_ylim(0,10)
+    ax.set_zlim(0,10)
     ax.scatter(accelGyro[0], accelGyro[1], accelGyro[2], c='#1ec78d', marker='o')
 
 
