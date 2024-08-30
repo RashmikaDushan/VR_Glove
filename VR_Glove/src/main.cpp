@@ -1,17 +1,11 @@
-/*********
-  Rui Santos & Sara Santos - Random Nerd Tutorials
-  Complete project details at https://RandomNerdTutorials.com/esp32-mpu-6050-web-server/
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
-  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*********/
 #include <Arduino.h>
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 
-// Create a sensor object
-Adafruit_MPU6050 mpu;
+String device_name = "VR_Glove";
 
-sensors_event_t a, g, temp;
+Adafruit_MPU6050 mpu; // Create a sensor object
+sensors_event_t a, g, temp; // Create a sensor event objects
 
 // Init MPU6050
 void initMPU(){
@@ -23,9 +17,10 @@ void initMPU(){
   }
   Serial.println("MPU6050 Found!");
 }
+
 void setup() {
-  Serial.begin(115200);
-  initMPU();
+  Serial.begin(115200); // Start the serial monitor
+  initMPU(); // Initialize MPU6050
 }
 
 void loop() {
