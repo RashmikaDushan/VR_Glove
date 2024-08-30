@@ -1,4 +1,5 @@
 import serial.tools.list_ports
+import serial
 import numpy as np
 
 class SerialCom:
@@ -40,6 +41,18 @@ class SerialCom:
             if self.serial_com.in_waiting: # if data is available
                 packet = np.array(self.serial_com.readline().decode('ascii').strip().split(",")) # read data from the serial port and convert string array
                 self.accel_gyro = packet.astype(float) # convert the string array to float array
-            return self.accel_gyro # return the data
+            return self.accel_gyro.tolist() # return the data
         except:
             return "Error" # return error if no data is received
+
+
+#################################
+
+# For Testing
+
+# ser = SerialCom() # create an object of the SerialCom class
+# ser.serial_init() # initialize the serial port
+
+# while True: # loop forever
+#     data = ser.read_data() # read data from the serial port
+#     print(data) # print the data
