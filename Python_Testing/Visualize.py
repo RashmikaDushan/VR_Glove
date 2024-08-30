@@ -1,35 +1,30 @@
-import serial.tools.list_ports
+import matplotlib.animation as mpl_animation
 import numpy as np
+import matplotlib.pyplot as plt
 
-ports = list(serial.tools.list_ports.comports())
+accelGyro = np.array([0.1, 0.5, 0.3, 0.4, 0.5, 0.6])
 
-portlist = []
+# plt.rcParams['figure.figsize'] = (6,4)
 
-acceleration = [0 , 0 , 0]
-gyroscope = [0 , 0 , 0]
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
 
-for onePort in ports:
-    portlist.append(str(onePort))
-    print(str(onePort))
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 10)
 
-portNumber = "/dev/cu.usbserial-0001"
-inputPortNumber = input(str("Please enter the port number: ").strip())
+def animate(i):
+    global accelGyro
+    print(accelGyro)
+    ReadData()
+    ax.clear()
+    ax.scatter(accelGyro[0], accelGyro[1], accelGyro[2], c='#1ec78d', marker='o')
 
-if not(inputPortNumber == ""):
-    portNumber = inputPortNumber
-    print("Using port number: " + portNumber)
-else:
-    print("Using default port number: " + portNumber)
 
-SerialCom = serial.Serial("/dev/cu.usbserial-0001", 115200)
+def ReadData():
+    global accelGyro
+    accelGyro = np.random.uniform(0, 10, 6)
+    print(accelGyro)
 
-while True:
-    try:
-        if SerialCom.in_waiting:
-            packet = np.array(SerialCom.readline().decode('utf-8').strip().split(","))
-            packet = packet.astype(float)
-            print(packet)
-    except:
-        print("Error")
-        pass
-        
+ani = mpl_animation.FuncAnimation(fig,animate, frames=100, interval=1000) 
+
+plt.show()
