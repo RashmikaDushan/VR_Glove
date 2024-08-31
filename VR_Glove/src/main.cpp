@@ -1,41 +1,14 @@
 #include <Arduino.h>
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
+#include <Potentiometer.h>
 
-#define potentiometerPin 34
-
-String device_name = "VR_Glove";
-
-Adafruit_MPU6050 mpu; // Create a sensor object
-sensors_event_t a, g, temp; // Create a sensor event objects
-int bendAngle = 0;
-int restrictAngle = 0;
-
-// Init MPU6050
-void initMPU(){
-  if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip");
-    while (1) {
-      delay(10);
-    }
-  }
-  Serial.println("MPU6050 Found!");
-}
+int potentiometerPin = 34;
 
 void setup() {
-  Serial.begin(115200); // Start the serial monitor
-  pinMode(potentiometerPin, INPUT);
-  initMPU(); // Initialize MPU6050
+  Serial.begin(115200);
+  Potentiometer(potentiometerPin);
 }
 
 void loop() {
-  mpu.getEvent(&a, &g, &temp);
-  bendAngle = analogRead(potentiometerPin);
-  Serial.print(a.acceleration.x);Serial.print(",");
-  Serial.print(a.acceleration.y);Serial.print(",");
-  Serial.print(a.acceleration.z);Serial.print(',');
-  Serial.print(g.gyro.x);Serial.print(",");
-  Serial.print(g.gyro.y);Serial.print(",");
-  Serial.print(g.gyro.z);Serial.print(",");
-  Serial.println(bendAngle);
+  Serial.println("Potentiometer value: " + String(Potentiometer::read()));
+  delay(1000);
 }
