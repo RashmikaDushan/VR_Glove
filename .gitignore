@@ -1,3 +1,4 @@
 .DS_Store
 *.mp4
 Python_Testing/__pycache__
+Python_Testing/test.py

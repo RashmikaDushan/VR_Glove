@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from serialRead import SerialCom
 
+np.set_printoptions(precision=2) # set the precision of the numpy array to 2 decimal places
+
 accel_gyro = np.array([0, 0, 0, 0, 0, 0]) # dummy values
 
 serial_in = SerialCom() # create an object of the SerialCom class
@@ -19,7 +21,7 @@ def animate(i): # function to animate the plot
     global accel_gyro
     accel_gyro = serial_in.read_data() # update data
     print(accel_gyro)
-    if not(accel_gyro == "1") and len(accel_gyro)==6: # if no data is received
+    if not(accel_gyro.tolist() == "1") and len(accel_gyro)==6: # if no data is received
         ax.clear()
         ax.set_xlim(-10,10)
         ax.set_ylim(-10,10)
