@@ -2,10 +2,14 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 
+#define potentiometerPin 34
+
 String device_name = "VR_Glove";
 
 Adafruit_MPU6050 mpu; // Create a sensor object
 sensors_event_t a, g, temp; // Create a sensor event objects
+int bendAngle = 0;
+int restrictAngle = 0;
 
 // Init MPU6050
 void initMPU(){
@@ -20,16 +24,18 @@ void initMPU(){
 
 void setup() {
   Serial.begin(115200); // Start the serial monitor
+  pinMode(potentiometerPin, INPUT);
   initMPU(); // Initialize MPU6050
 }
 
 void loop() {
   mpu.getEvent(&a, &g, &temp);
+  bendAngle = analogRead(potentiometerPin);
   Serial.print(a.acceleration.x);Serial.print(",");
   Serial.print(a.acceleration.y);Serial.print(",");
-  Serial.print(a.acceleration.z);
-  Serial.print(',');
+  Serial.print(a.acceleration.z);Serial.print(',');
   Serial.print(g.gyro.x);Serial.print(",");
   Serial.print(g.gyro.y);Serial.print(",");
-  Serial.println(g.gyro.z);
+  Serial.print(g.gyro.z);Serial.print(",");
+  Serial.println(bendAngle);
 }
