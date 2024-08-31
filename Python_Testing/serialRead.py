@@ -6,11 +6,12 @@ class SerialCom:
     def __init__(self):
         self.serial_com = None
         self.accel_gyro = np.array([0, 0, 0, 0, 0, 0]).astype(float) # np.zeros(shape=(1,6), dtype=float)
-        self.accel_gyro_prev = np.array([0, 0, 0, 0, 0, 0]).astype(float) # np.zeros(shape=(1,6), dtype=float)
         self.port_number = "/dev/cu.usbserial-0001"
         self.dummy = False
         self.alpha = 0.1
         self.filtered = False
+        self.cal_buffer = []
+        self.error = np.array([0, 0, 0, 0, 0, 0]).astype(float)
 
     def serial_init(self,default_port_number=True, baud_rate=115200, dummy=False):
 
@@ -48,12 +49,13 @@ class SerialCom:
 
             self.serial_com = serial.Serial(self.port_number, baud_rate) # open the serial port
 
-    def read_data(self,filtered=False):
+    def read_data(self,filtered=False,alpha=0.1):
 
         '''This function reads data from the serial port when it's available 
         and returns it.If the dummy flag is set, it returns dummy data.'''
         
         self.filtered = filtered
+        self.alpha = alpha
 
         if self.dummy:
             packet = (self.accel_gyro + np.random.uniform(-0.5, 0.5, 6))%10 # add random noise to the data
@@ -74,13 +76,36 @@ class SerialCom:
             except Exception as e:
                 print(e)
                 return "1" # return error if no data is received
+    
+    def calibrate(self):
+        print("Calibrating...")
+        i = 0
+        timeout = 0
+
+        while i < 100:
+            data = self.read_data()
+            if not(data == "1") and len(data)==6 and data != [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]:
+                print(data)
+                self.cal_buffer.append(data)
+                i += 1
+            timeout += 1
+            if timeout > 1000:
+                print("Timeout")
+                break
+
+        print(self.cal_buffer)
+        self.cal_buffer = np.array(self.cal_buffer).astype(float)
+        self.error = np.mean(self.cal_buffer, axis=0)
+        print(self.error)
+        print("Calibration complete")
 
 #################################
 
 # For Testing
 
-# ser = SerialCom() # create an object of the SerialCom class
-# ser.serial_init() # initialize the serial port
+ser = SerialCom() # create an object of the SerialCom class
+ser.serial_init() # initialize the serial port
+ser.calibrate()
 
 # while True: # loop forever
 #     data = ser.read_data() # read data from the serial port

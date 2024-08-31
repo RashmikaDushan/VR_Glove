@@ -6,7 +6,7 @@ from serialRead import SerialCom
 accel_gyro = np.array([0, 0, 0, 0, 0, 0]) # dummy values
 
 serial_in = SerialCom() # create an object of the SerialCom class
-serial_in.serial_init(dummy=True) # initialize the serial port
+serial_in.serial_init() # initialize the serial port
 
 fig = plt.figure(figsize=(10, 7)) # create a figure with 10x7 size
 ax = fig.add_subplot(111, projection='3d') # create axes for the plot
@@ -17,7 +17,7 @@ ax.set_zlim(-10,10)
 
 def animate(i): # function to animate the plot
     global accel_gyro
-    accel_gyro = serial_in.read_data(filtered=True) # update data
+    accel_gyro = serial_in.read_data() # update data
     print(accel_gyro)
     if not(accel_gyro == "1") and len(accel_gyro)==6: # if no data is received
         ax.clear()
