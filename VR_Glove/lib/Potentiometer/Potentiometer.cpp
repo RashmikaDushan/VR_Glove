@@ -1,27 +1,11 @@
 #include "Potentiometer.h"
 
-class Potentiometer
+Potentiometer::Potentiometer(int potentiometerPin) // Initialize the sensor
 {
-private:    
-    int maxValue, minValue, pin;
-    void calibrateMaxValue();
-    void calibrateMinValue();
-    float calTime = 0;
-
-public:
-    int readValue;
-    String finger;
-    Potentiometer(int pin);
-    ~Potentiometer();
-    int read();
-};
-
-Potentiometer::Potentiometer(int pin) // Initialize the sensor
-{
-    readValue = 0;
+    value = 0;
     minValue = 4095; // set opposite for callibration
     maxValue = 0;
-    this->pin = pin;
+    this->pin = potentiometerPin;
     analogReadResolution(12);
     pinMode(pin, INPUT);
 }
@@ -32,21 +16,21 @@ Potentiometer::~Potentiometer()
 }
 
 void Potentiometer::calibrateMaxValue(){ // calibrate the maximum value of sensor
-    readValue = analogRead(pin);
-    if (readValue > this->maxValue){
-        maxValue = readValue;
+    value = analogRead(pin);
+    if (value > this->maxValue){
+        maxValue = value;
     }
 }
 
 void Potentiometer::calibrateMinValue(){ // calibrate the minimum value of sensor
-    readValue = analogRead(pin);
-    if (readValue < this->minValue){
-        minValue = readValue;
+    value = analogRead(pin);
+    if (value < this->minValue){
+        minValue = value;
     }
 }
 
-int Potentiometer::read(){ // read the value of sensor
-    readValue = analogRead(pin);
-    readValue = map(readValue, minValue, maxValue, 0, 4095);
-    return readValue;
+int Potentiometer::readValue(){ // read the value of sensor
+    value = analogRead(pin);
+    value = map(value, minValue, maxValue, 0, 4095);
+    return value;
 }

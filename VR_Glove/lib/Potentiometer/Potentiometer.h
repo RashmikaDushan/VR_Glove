@@ -2,7 +2,7 @@
 #define POTENTIOMETER_H
 
 #include <Arduino.h>
-#include <Wire.h>
+
 
 class Potentiometer
 {
@@ -10,14 +10,13 @@ private:
     int maxValue, minValue, pin;
     void calibrateMaxValue();
     void calibrateMinValue();
-    float calTime;
+    float calTime = 0;
 
 public:
-    int readValue;
-    String finger;
-    Potentiometer(int pin);
+    Potentiometer(int potentiometerPin);
     ~Potentiometer();
-    int read();
+    int readValue();
+    int value;
+    String finger;
 };
-
-#endif  // POTENTIOMETER_H
+#endif

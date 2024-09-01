@@ -1,14 +1,22 @@
 #include <Arduino.h>
+#include <IMU.h>
 #include <Potentiometer.h>
 
-int potentiometerPin = 34;
+IMU imu;
+Potentiometer potentiometer(34);
 
 void setup() {
-  Serial.begin(115200);
-  Potentiometer(potentiometerPin);
+    Serial.begin(115200);
+    imu.begin();
 }
 
 void loop() {
-  Serial.println("Potentiometer value: " + String(Potentiometer::read()));
-  delay(1000);
+    int potValue = potentiometer.readValue();
+
+    Serial.print("Accel X: ");
+    imu.sendData(false);
+    Serial.print(" | Pot Value: ");
+    Serial.println(potValue);
+
+    delay(1000);
 }

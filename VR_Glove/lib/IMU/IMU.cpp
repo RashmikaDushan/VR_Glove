@@ -1,19 +1,12 @@
 #include "IMU.h"
 
-class IMU
-{
-private:
-  Adafruit_MPU6050 mpu; // Create a sensor object
-  sensors_event_t a, g, temp;
+IMU::IMU() {}
 
-public:
-  IMU();
-  ~IMU();
-  void sendData(bool blt);
-};
-
-IMU::IMU()
+IMU::~IMU()
 {
+}
+
+void IMU::begin() {
   if (!mpu.begin()) {
     Serial.println("Failed to find MPU6050");
     while (1) {
@@ -21,10 +14,6 @@ IMU::IMU()
     }
   }
   Serial.println("MPU6050 initialized!");
-}
-
-IMU::~IMU()
-{
 }
 
 void IMU::sendData(bool blt) {
