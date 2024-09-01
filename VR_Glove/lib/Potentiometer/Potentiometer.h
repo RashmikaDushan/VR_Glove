@@ -16,6 +16,7 @@ public:
     void calibrateMaxValue(bool debug = false);
     void calibrateMinValue(bool debug = false);
     int readValue();
+    bool calibrated();
     int value;
     String finger;
 };

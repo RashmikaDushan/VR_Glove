@@ -42,3 +42,7 @@ int Potentiometer::readValue(){ // read the value of sensor
     value = map(value, minValue, maxValue, 0, 4095);
     return value;
 }
+
+bool Potentiometer::calibrated(){
+    return this->maxValue > this->minValue;
+}

@@ -5,6 +5,7 @@
 
 
 void waitForKeyPress();
+void calibratePotentiometers();
 
 IMU imu;
 Potentiometer potentiometer(34);
@@ -14,22 +15,8 @@ void setup() {
     Serial.begin(115200);
     servo.attach(18);
     servo.setPeriodHertz(50);
-    Serial.println("Calibrating Potentiometer...");
-    Serial.println("Fully rotate the potentiometer");
     waitForKeyPress();
-    for (size_t i = 0; i < 30; i++)
-    {
-      potentiometer.calibrateMaxValue(true);
-      delay(100);
-    }
-    Serial.println("Fully rotate the potentiometer in the opposite direction");
-    waitForKeyPress();
-    for (size_t i = 0; i < 30; i++)
-    {
-      potentiometer.calibrateMinValue(true);
-      delay(100);
-    }
-    Serial.println("Calibration complete!");
+    calibratePotentiometers();
 }
 
 void loop() {
@@ -58,4 +45,31 @@ void waitForKeyPress() {
     while (Serial.available()) {
         Serial.read();
     }
+}
+
+void calibratePotentiometers() {
+  Serial.println("Calibrating Potentiometer...");
+  while (true)
+  {
+    Serial.println("Fully rotate the potentiometer");
+    waitForKeyPress();
+    for (size_t i = 0; i < 30; i++)
+    {
+      potentiometer.calibrateMaxValue(true);
+      delay(100);
+    }
+    Serial.println("Fully rotate the potentiometer in the opposite direction");
+    waitForKeyPress();
+    for (size_t i = 0; i < 30; i++)
+    {
+      potentiometer.calibrateMinValue(true);
+      delay(100);
+    }
+    if (potentiometer.calibrated())
+    {
+      Serial.println("Calibration complete!");
+      break;
+    }
+    Serial.println("Calibration failed, retrying...");
+  }
 }
