@@ -15,17 +15,25 @@ Potentiometer::~Potentiometer()
     // destructor
 }
 
-void Potentiometer::calibrateMaxValue(){ // calibrate the maximum value of sensor
+void Potentiometer::calibrateMaxValue(bool debug){ // calibrate the maximum value of sensor
     value = analogRead(pin);
     if (value > this->maxValue){
         maxValue = value;
+        if (debug){
+            Serial.print("Max Value: ");
+            Serial.println(maxValue);
+        }
     }
 }
 
-void Potentiometer::calibrateMinValue(){ // calibrate the minimum value of sensor
+void Potentiometer::calibrateMinValue(bool debug){ // calibrate the minimum value of sensor
     value = analogRead(pin);
     if (value < this->minValue){
         minValue = value;
+        if (debug){
+            Serial.print("Min Value: ");
+            Serial.println(minValue);
+        }
     }
 }
 
