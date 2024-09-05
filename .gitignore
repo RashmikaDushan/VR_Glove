@@ -2,3 +2,11 @@
 *.mp4
 Python_Testing/__pycache__
 Python_Testing/test.py
+Unity/.vscode
+Unity/Library
+Unity/Logs
+Unity/Temp
+Unity/UserSettings
+Unity/Unity.sln
+*.meta
+*.asset
