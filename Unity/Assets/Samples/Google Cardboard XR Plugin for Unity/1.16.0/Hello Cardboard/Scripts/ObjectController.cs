@@ -53,6 +53,7 @@ public class ObjectController : MonoBehaviour
         _startingPosition = transform.parent.localPosition;
         _myRenderer = GetComponent<Renderer>();
         SetMaterial(false);
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     /// <summary>
