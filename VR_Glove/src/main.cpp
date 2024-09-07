@@ -2,6 +2,7 @@
 #include <IMU.h>
 #include <Potentiometer.h>
 #include <ESP32Servo.h>
+#include <ServoMotor.h>
 
 
 void waitForKeyPress();
@@ -9,12 +10,10 @@ void calibratePotentiometers();
 
 IMU imu;
 Potentiometer potentiometer(34);
-Servo servo;
+ServoMotor servo(18);
 
 void setup() {
     Serial.begin(115200);
-    servo.attach(18);
-    servo.setPeriodHertz(50);
     waitForKeyPress();
     calibratePotentiometers();
 }
@@ -24,7 +23,7 @@ void loop() {
     Serial.print("Bent angle: ");
     Serial.println(potValue);
     int angle = map(potValue, 0, 4095, 0, 180);
-    servo.write(angle);
+    servo.writeAngle(angle);
     delay(1000);
 }
 
