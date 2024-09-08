@@ -6,8 +6,8 @@ ServoMotor::ServoMotor(int servoPin) // Initialize the sensor
     this->pin = servoPin;
     servo.attach(pin);
     servo.setPeriodHertz(50);
-    angle = 180; // need to change
-    servo.write(angle);
+    percentage = 180; // need to change
+    servo.write(percentage);
     // minValue = 4095; // set opposite for callibration
     // maxValue = 0;
 }
@@ -39,10 +39,10 @@ ServoMotor::~ServoMotor()
 //     }
 // }
 
-int ServoMotor::writeAngle(int angle){ // read the value of sensor
-    this->angle = angle;
-    servo.write(angle);
-    return angle;
+int ServoMotor::writeAngle(int percentage){ // read the value of sensor
+    this->percentage = percentage;
+    servo.write(percentage);
+    return percentage;
 }
 
 // bool ServoMotor::calibrated(){

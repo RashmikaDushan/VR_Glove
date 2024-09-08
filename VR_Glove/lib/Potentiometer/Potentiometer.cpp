@@ -2,7 +2,7 @@
 
 Potentiometer::Potentiometer(int potentiometerPin) // Initialize the sensor
 {
-    value = 0;
+    percentage = 0;
     minValue = 4095; // set opposite for callibration
     maxValue = 0;
     this->pin = potentiometerPin;
@@ -16,9 +16,9 @@ Potentiometer::~Potentiometer()
 }
 
 void Potentiometer::calibrateMaxValue(bool debug){ // calibrate the maximum value of sensor
-    value = analogRead(pin);
-    if (value > this->maxValue){
-        maxValue = value;
+    percentage = analogRead(pin);
+    if (percentage > this->maxValue){
+        maxValue = percentage;
         if (debug){
             Serial.print("Max Value: ");
             Serial.println(maxValue);
@@ -27,9 +27,9 @@ void Potentiometer::calibrateMaxValue(bool debug){ // calibrate the maximum valu
 }
 
 void Potentiometer::calibrateMinValue(bool debug){ // calibrate the minimum value of sensor
-    value = analogRead(pin);
-    if (value < this->minValue){
-        minValue = value;
+    percentage = analogRead(pin);
+    if (percentage < this->minValue){
+        minValue = percentage;
         if (debug){
             Serial.print("Min Value: ");
             Serial.println(minValue);
@@ -38,9 +38,9 @@ void Potentiometer::calibrateMinValue(bool debug){ // calibrate the minimum valu
 }
 
 int Potentiometer::readValue(){ // read the value of sensor
-    value = analogRead(pin);
-    value = map(value, minValue, maxValue, 0, 4095);
-    return value;
+    percentage = analogRead(pin);
+    percentage = map(percentage, minValue, maxValue, 0, 4095);
+    return percentage;
 }
 
 bool Potentiometer::calibrated(){

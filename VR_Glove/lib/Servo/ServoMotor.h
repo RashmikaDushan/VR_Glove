@@ -18,7 +18,7 @@ public:
     // void calibrateMinValue(bool debug = false);
     int writeAngle(int angle);
     // bool calibrated();
-    int angle,finger; // should implement the finger
+    int percentage,finger; // should implement the finger
 };
 
 #endif

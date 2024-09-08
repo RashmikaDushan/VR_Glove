@@ -16,7 +16,7 @@ public:
     void calibrateMinValue(bool debug = false);
     int readValue();
     bool calibrated();
-    int value,finger; // should implement the finger
+    int percentage,finger; // should implement the finger
 };
 
 #endif

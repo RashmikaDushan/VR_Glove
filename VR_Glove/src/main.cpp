@@ -19,10 +19,11 @@ void setup() {
 }
 
 void loop() {
-    int potValue = potentiometer.readValue();
+    int potPercent = potentiometer.readValue();
     Serial.print("Bent angle: ");
-    Serial.println(potValue);
-    int angle = map(potValue, 0, 4095, 0, 180);
+    Serial.println(potPercent);
+    int angle = map(potPercent, 0, 4095, 0, 180);
+    angle = 180-angle;
     servo.writeAngle(angle);
     delay(1000);
 }
