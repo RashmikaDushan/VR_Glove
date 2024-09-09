@@ -8,7 +8,6 @@ class Potentiometer
 {
 private:    
     int maxValue, minValue, pin;
-    float calTime = 0;
 
 public:
     Potentiometer(int potentiometerPin);
@@ -17,8 +16,7 @@ public:
     void calibrateMinValue(bool debug = false);
     int readValue();
     bool calibrated();
-    int value;
-    String finger;
+    int percentage,finger; // should implement the finger
 };
 
 #endif
