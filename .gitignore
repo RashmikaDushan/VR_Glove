@@ -8,7 +8,13 @@ UnityVR/Logs
 UnityVR/Temp
 UnityVR/UserSettings
 UnityVR/Unity.sln
-UnitySerial
+UnitySerial/.vscode
+UnitySerial/.vs
+UnitySerial/Library
+UnitySerial/Logs
+UnitySerial/Temp
+UnitySerial/UserSettings
+UnitySerial/Unity.sln
 *.meta
 *.asset
 *.blend1
