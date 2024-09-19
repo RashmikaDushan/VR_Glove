@@ -621,11 +621,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a3be7109326d0438cc2bd554cdeb52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text1: {fileID: 4797377}
+  onScreenText: {fileID: 4797377}
   indexFinger: {fileID: 520456176}
+  middleFinger: {fileID: 520456180}
+  ringFinger: {fileID: 520456179}
+  pinkyFinger: {fileID: 520456178}
+  thumbFinger: {fileID: 520456177}
+  index: 0
+  middle: 0
+  ring: 0
+  pinky: 0
+  thumb: 0
 --- !u!1 &520456176 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -467242033293118739, guid: 0bee1cee1ab841b4a8bfdaa8e4b1d980,
+    type: 3}
+  m_PrefabInstance: {fileID: 520456173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &520456177 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1118195327104056823, guid: 0bee1cee1ab841b4a8bfdaa8e4b1d980,
+    type: 3}
+  m_PrefabInstance: {fileID: 520456173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &520456178 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3248513817156979155, guid: 0bee1cee1ab841b4a8bfdaa8e4b1d980,
+    type: 3}
+  m_PrefabInstance: {fileID: 520456173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &520456179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 500553209809663815, guid: 0bee1cee1ab841b4a8bfdaa8e4b1d980,
+    type: 3}
+  m_PrefabInstance: {fileID: 520456173}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &520456180 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4009218980722513530, guid: 0bee1cee1ab841b4a8bfdaa8e4b1d980,
     type: 3}
   m_PrefabInstance: {fileID: 520456173}
   m_PrefabAsset: {fileID: 0}
