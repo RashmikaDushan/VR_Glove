@@ -15,6 +15,7 @@ UnitySerial/Logs
 UnitySerial/Temp
 UnitySerial/UserSettings
 UnitySerial/Unity.sln
+UnitySerial/Assets/TextMesh Pro/Documentation
 *.meta
 *.asset
 *.blend1
