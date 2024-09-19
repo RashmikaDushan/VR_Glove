@@ -3,7 +3,8 @@ using UnityEngine;
 using System.IO.Ports;
 using TMPro;
 using System;
-public class TestConnection : MonoBehaviour
+using UnityEngine.XR;
+public class SerialConnection : MonoBehaviour
 {
     SerialPort data_stream = new SerialPort("COM3", 19200); // Serial port for reading data
     private string receivedString; // Data received from the serial port
@@ -13,7 +14,8 @@ public class TestConnection : MonoBehaviour
     public GameObject[] fingerFirstJoints = new GameObject[5]; // Array of first joints of the fingers
     public GameObject[] fingerSecondJoints = new GameObject[5]; // Array of second joints of the fingers
     public GameObject[] fingerThirdJoints = new GameObject[5]; // Array of third joints of the fingers
-    public int index;
+    private bool[] fingerCollided = new bool[5] {false, false, false, false, false}; // Array to check if the fingers are collided
+    public int index; // variables for debuging
     public int middle;
     public int ring;
     public int pinky;
@@ -39,14 +41,15 @@ public class TestConnection : MonoBehaviour
             catch (System.Exception e)
             {
                 Debug.LogWarning("Error reading from serial port: " + e.Message);
+                onScreenText.text = "Error reading from serial port.";
             }
         }
-        onScreenText.SetText(((float)(intData[0] / 45.5111111)).ToString());
         FingerBend(0, index);
         FingerBend(1, middle);
         FingerBend(2, ring);
         FingerBend(3, pinky);
         FingerBend(4, thumb);
+        Debug.Log("Main script"+fingerCollided[0]);
     }
 
     void OnApplicationQuit()
@@ -81,4 +84,10 @@ public class TestConnection : MonoBehaviour
         }
     }
 
+    public void RecordCollision(int fingerNumber){
+        fingerCollided[fingerNumber] = true;
+    }
+    public void ClearCollision(int fingerNumber){
+        fingerCollided[fingerNumber] = false;
+    }
 }
