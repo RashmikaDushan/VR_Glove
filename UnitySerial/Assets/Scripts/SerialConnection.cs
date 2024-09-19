@@ -6,15 +6,16 @@ using System;
 using UnityEngine.XR;
 public class SerialConnection : MonoBehaviour
 {
-    SerialPort data_stream = new SerialPort("COM3", 19200); // Serial port for reading data
+    SerialPort serialPort = new SerialPort("COM3", 19200); // Serial port for reading data
     private string receivedString; // Data received from the serial port
+    private string sendString; // Data to be sent to the serial port
     private string[] stringData; // Received data as strings
-    private int[] intData = new int[5] {0,0,0,0,0}; // Recieved data as integers
+    private int[] intData = new int[5] { 0, 0, 0, 0, 0 }; // Recieved data as integers
     public TextMeshProUGUI onScreenText; // Text to display necessary data
     public GameObject[] fingerFirstJoints = new GameObject[5]; // Array of first joints of the fingers
     public GameObject[] fingerSecondJoints = new GameObject[5]; // Array of second joints of the fingers
     public GameObject[] fingerThirdJoints = new GameObject[5]; // Array of third joints of the fingers
-    private bool[] fingerCollided = new bool[5] {false, false, false, false, false}; // Array to check if the fingers are collided
+    private bool[] fingerCollided = new bool[5] { false, false, false, false, false }; // Array to check if the fingers are collided
     public int index; // variables for debuging
     public int middle;
     public int ring;
@@ -25,18 +26,22 @@ public class SerialConnection : MonoBehaviour
 
     void Start()
     {
-        data_stream.Open(); // Initiate the Serial stream
+        serialPort.Open(); // Initiate the Serial stream
     }
 
     void Update()
     {
-        if (data_stream.IsOpen)
+
+        sendString = string.Join(", ", fingerCollided); // prepare the data to be sent to the serial port
+
+        if (serialPort.IsOpen)
         {
             try
             {
-                receivedString = data_stream.ReadLine();
+                receivedString = serialPort.ReadLine(); // Read the data from the serial port
                 stringData = receivedString.Split(',');
                 intData = Array.ConvertAll(stringData, int.Parse);
+                serialPort.WriteLine(sendString); // Send the data to the serial port
             }
             catch (System.Exception e)
             {
@@ -44,20 +49,22 @@ public class SerialConnection : MonoBehaviour
                 onScreenText.text = "Error reading from serial port.";
             }
         }
-        FingerBend(0, index);
-        FingerBend(1, middle);
-        FingerBend(2, ring);
-        FingerBend(3, pinky);
-        FingerBend(4, thumb);
-        Debug.Log("Main script"+fingerCollided[0]);
+        FingerBendDebug(0, index);
+        FingerBendDebug(1, middle);
+        FingerBendDebug(2, ring);
+        FingerBendDebug(3, pinky);
+        FingerBendDebug(4, thumb);
+        // FingerBend();
+        string arrayValues = string.Join(", ", fingerCollided);
+        Debug.Log("boolArray: " + arrayValues);
     }
 
     void OnApplicationQuit()
     {
-        data_stream.Close(); // Close the Serial stream
+        serialPort.Close(); // Close the Serial stream
     }
 
-    void FingerBend(int fingerNumber, int bentPercentage)
+    void FingerBendDebug(int fingerNumber, int bentPercentage)
     {
         if (bentPercentage < 4096 || bentPercentage >= 0)
         {
@@ -83,11 +90,41 @@ public class SerialConnection : MonoBehaviour
             Debug.LogWarning("Invalid bent percentage");
         }
     }
-
-    public void RecordCollision(int fingerNumber){
+    void FingerBend()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (intData[i] < 4096 || intData[i] >= 0)
+            {
+                if (i == 4)
+                {
+                    fingerFirstJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor) + RotationOffsets[i], 0, 0);
+                    fingerSecondJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor) + RotationOffsets[i], 0, 0);
+                    fingerThirdJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor) + RotationOffsets[i], 0, 0);
+                }
+                else if (i <= 3 || i >= 0)
+                {
+                    fingerFirstJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor) + RotationOffsets[i]);
+                    fingerSecondJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor) + RotationOffsets[i]);
+                    fingerThirdJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor) + RotationOffsets[i]);
+                }
+                else
+                {
+                    Debug.LogWarning("Invalid finger number");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Invalid bent percentage");
+            }
+        }
+    }
+    public void RecordCollision(int fingerNumber)
+    {
         fingerCollided[fingerNumber] = true;
     }
-    public void ClearCollision(int fingerNumber){
+    public void ClearCollision(int fingerNumber)
+    {
         fingerCollided[fingerNumber] = false;
     }
 }
