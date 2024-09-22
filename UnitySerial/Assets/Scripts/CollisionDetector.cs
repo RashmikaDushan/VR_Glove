@@ -11,7 +11,7 @@ public class CollisionDetector : MonoBehaviour
     {
         serialConnection = FindAnyObjectByType<SerialConnection>();
     }
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
         if(col.gameObject.tag != "hand")
         {
@@ -19,7 +19,7 @@ public class CollisionDetector : MonoBehaviour
             serialConnection.RecordCollision(fingerNumber);
         }
     }
-    void OnCollisionExit(Collision col)
+    void OnTriggerExit(Collider col)
     {
         if(col.gameObject.tag != "hand")
         {
