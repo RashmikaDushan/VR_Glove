@@ -30,30 +30,14 @@ public class SerialConnection : MonoBehaviour
     void Start()
     {
         serialPort.Open(); // Initiate the Serial stream
+        SerialCommunication();
+        ResetTransform();
     }
 
     void Update()
     {
-
-        sendString = string.Join(", ", fingerCollided); // prepare the data to be sent to the serial port
-
-        if (serialPort.IsOpen)
-        {
-            try
-            {
-                receivedString = serialPort.ReadLine(); // Read the data from the serial port
-                stringData = receivedString.Split(',');
-                floatData = Array.ConvertAll(stringData, float.Parse);
-                serialPort.WriteLine(sendString); // Send the data to the serial port
-                // Debug.Log("Converted floatData: " + string.Join(", ", floatData)); // Debug log the converted floatData
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("Error reading from serial port: " + e.Message);
-                onScreenText.text = "Error reading from serial port.";
-            }
-        }
-        hand.transform.localEulerAngles = new Vector3(-floatData[2]-rotationOffset[0], floatData[0]-rotationOffset[1], floatData[1]-rotationOffset[2]);
+        SerialCommunication();
+        hand.transform.localEulerAngles = new Vector3(-floatData[1]-rotationOffset[0], floatData[0]-rotationOffset[1], -floatData[2]-rotationOffset[2]);
         // this.transform.localRotation = Quaternion.Euler(intData[0], intData[1], intData[2]);
         FingerBendDebug(0, index);
         FingerBendDebug(1, middle);
@@ -132,12 +116,30 @@ public class SerialConnection : MonoBehaviour
     {
         fingerCollided[fingerNumber] = false;
     }
-
-    public void resetTransform()
+    public void ResetTransform()
     {
         rotationOffset[0] = -floatData[2];
         rotationOffset[1] = floatData[0];
         rotationOffset[2] = floatData[1];
-        Debug.Log("Rotation Euler: " + string.Join(", ", rotationOffset)); // Debug log the converted floatData
+    }
+    private void SerialCommunication(){
+        sendString = string.Join(", ", fingerCollided); // prepare the data to be sent to the serial port
+
+        if (serialPort.IsOpen)
+        {
+            try
+            {
+                receivedString = serialPort.ReadLine(); // Read the data from the serial port
+                stringData = receivedString.Split(',');
+                floatData = Array.ConvertAll(stringData, float.Parse);
+                serialPort.WriteLine(sendString); // Send the data to the serial port
+                Debug.Log("Converted floatData: " + string.Join(", ", floatData)); // Debug log the converted floatData
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("Error reading from serial port: " + e.Message);
+                onScreenText.text = "Error reading from serial port.";
+            }
+        }
     }
 }
