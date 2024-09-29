@@ -3,20 +3,21 @@
 
 #include <Arduino.h>
 
-
 class Potentiometer
 {
-private:    
+private:
     int maxValue, minValue, pin;
 
 public:
-    Potentiometer(int potentiometerPin);
+    Potentiometer(int potentiometerPin, String fingerName, bool callibrateActivated);
     ~Potentiometer();
     void calibrateMaxValue(bool debug = false);
     void calibrateMinValue(bool debug = false);
-    int readValue();
+    float readValue();
     bool calibrated();
-    int percentage,finger; // should implement the finger
+    void calibratePotentiometer();
+    float percentage; // should implement the finger
+    String fingerName;
 };
 
 #endif

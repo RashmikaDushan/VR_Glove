@@ -6,27 +6,47 @@ IMU::~IMU()
 {
 }
 
-void IMU::begin() {
-  if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050");
-    while (1) {
-      delay(10); // Infinite loop
-    }
+void IMU::begin()
+{
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+  Wire.begin();
+  Wire.setClock(400000);
+#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+  Fastwire::setup(400, true);
+#endif
+
+  Serial.begin(115200);
+  while (!Serial)
+    ;
+
+  mpu.initialize();
+  devStatus = mpu.dmpInitialize();
+
+  if (devStatus == 0)
+  {
+    mpu.CalibrateAccel(6);
+    mpu.CalibrateGyro(6);
+    mpu.setDMPEnabled(true);
+    dmpReady = true;
+    packetSize = mpu.dmpGetFIFOPacketSize();
   }
-  Serial.println("MPU6050 initialized!");
 }
 
-void IMU::sendData(bool blt) {
-  mpu.getEvent(&a, &g, &temp);
-  if (blt) {
-    // Send data via bluetooth
+float *IMU::returnData(bool debug)
+{
+  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer))
+  {
+    // Display Euler angles in degrees
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    mpu.dmpGetGravity(&gravity, &q);
+    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    ypr[0] = ypr[0] * 180 / M_PI;
+    ypr[1] = ypr[1] * 180 / M_PI;
+    ypr[2] = ypr[2] * 180 / M_PI;
+    if (debug)
+    {
+      Serial.printf("IMU values: %.2f,%.2f,%.2f || ", ypr[0], ypr[1], ypr[2]);
+    }
   }
-  else{
-    Serial.print(a.acceleration.x);Serial.print(",");
-    Serial.print(a.acceleration.y);Serial.print(",");
-    Serial.print(a.acceleration.z);Serial.print(',');
-    Serial.print(g.gyro.x);Serial.print(",");
-    Serial.print(g.gyro.y);Serial.print(",");
-    Serial.println(g.gyro.z);
-  }
+  return ypr;
 }

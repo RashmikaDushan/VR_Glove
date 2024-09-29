@@ -1,21 +1,33 @@
 #ifndef IMU_H
 #define IMU_H
 
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
-#include <Wire.h>
+#include "I2Cdev.h"
+#include "MPU6050_6Axis_MotionApps612.h"
+
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+#include "Wire.h"
+#endif
 
 class IMU
 {
 private:
-  Adafruit_MPU6050 mpu; // Create a sensor object
-  sensors_event_t a, g, temp;
+  MPU6050 mpu;
+  bool dmpReady = false;
+  uint8_t devStatus;
+  uint16_t packetSize;
+  uint8_t fifoBuffer[64];
+
+  Quaternion q;
+  VectorInt16 aa;
+  VectorInt16 aaReal;
+  VectorFloat gravity;
+  float ypr[3] = {0, 0, 0};
 
 public:
   IMU();
   ~IMU();
   void begin();
-  void sendData(bool blt);
+  float *returnData(bool debug);
 };
 
 #endif
