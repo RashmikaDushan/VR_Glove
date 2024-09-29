@@ -10,22 +10,21 @@ public class SerialConnection : MonoBehaviour
     private string receivedString; // Data received from the serial port
     private string sendString; // Data to be sent to the serial port
     private string[] stringData; // Received data as strings
-    private int[] intData = new int[5] { 0, 0, 0, 0, 0 }; // Recieved data as integers
-    private float[] floatData = new float[3] { 0, 0, 0}; // Recieved data as floats
+    private float[] floatData = new float[7] { 0, 0, 0, 0, 0, 0, 0}; // Recieved data as floats yaw,pitch,roll,index,middle,ring,pinky
     private float[] rotationOffset = new float[3] { 0, 0, 0};
     public TextMeshProUGUI onScreenText; // Text to display necessary data
     public GameObject[] fingerFirstJoints = new GameObject[5]; // Array of first joints of the fingers
     public GameObject[] fingerSecondJoints = new GameObject[5]; // Array of second joints of the fingers
     public GameObject[] fingerThirdJoints = new GameObject[5]; // Array of third joints of the fingers
     private bool[] fingerCollided = new bool[5] { false, false, false, false, false }; // Array to check if the fingers are collided
-    public int index; // variables for debuging
-    public int middle;
-    public int ring;
-    public int pinky;
-    public int thumb;
+    public float index; // variables for debuging
+    public float middle;
+    public float ring;
+    public float pinky;
+    public float thumb;
 
     public GameObject hand; // The hand object
-    private float conversionFactor = 45.5111111f; // Conversion factor to convert the data to degrees
+    private float conversionFactor = 180.0f; // Conversion factor to convert the data to degrees
 
     void Start()
     {
@@ -39,11 +38,11 @@ public class SerialConnection : MonoBehaviour
         SerialCommunication();
         hand.transform.localEulerAngles = new Vector3(-floatData[1]-rotationOffset[0], floatData[0]-rotationOffset[1], -floatData[2]-rotationOffset[2]);
         // this.transform.localRotation = Quaternion.Euler(intData[0], intData[1], intData[2]);
-        FingerBendDebug(0, index);
-        FingerBendDebug(1, middle);
-        FingerBendDebug(2, ring);
-        FingerBendDebug(3, pinky);
-        FingerBendDebug(4, thumb);
+        FingerBend(0, floatData[3]);
+        FingerBend(1, floatData[4]);
+        FingerBend(2, floatData[5]);
+        FingerBend(3, floatData[6]);
+        FingerBend(4, thumb);
         // FingerBend();
         // string arrayValues = string.Join(", ", fingerCollided);
         // Debug.Log("boolArray: " + arrayValues);
@@ -53,21 +52,21 @@ public class SerialConnection : MonoBehaviour
     {
         serialPort.Close(); // Close the Serial stream
     }
-    void FingerBendDebug(int fingerNumber, int bentPercentage)
+    void FingerBend(int fingerNumber, float bentPercentage)
     {
         if (bentPercentage < 4096 || bentPercentage >= 0)
         {
             if (fingerNumber == 4)
             {
-                fingerFirstJoints[fingerNumber].transform.localRotation = Quaternion.Euler((float)(bentPercentage / conversionFactor), 0, 0);
-                fingerSecondJoints[fingerNumber].transform.localRotation = Quaternion.Euler((float)(bentPercentage / conversionFactor), 0, 0);
-                fingerThirdJoints[fingerNumber].transform.localRotation = Quaternion.Euler((float)(bentPercentage / conversionFactor), 0, 0);
+                fingerFirstJoints[fingerNumber].transform.localRotation = Quaternion.Euler((bentPercentage * conversionFactor), 0, 0);
+                fingerSecondJoints[fingerNumber].transform.localRotation = Quaternion.Euler((bentPercentage * conversionFactor), 0, 0);
+                fingerThirdJoints[fingerNumber].transform.localRotation = Quaternion.Euler((bentPercentage * conversionFactor), 0, 0);
             }
             else if (fingerNumber <= 3 || fingerNumber >= 0)
             {
-                fingerFirstJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (float)(bentPercentage / conversionFactor));
-                fingerSecondJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (float)(bentPercentage / conversionFactor));
-                fingerThirdJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (float)(bentPercentage / conversionFactor));
+                fingerFirstJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (bentPercentage * conversionFactor));
+                fingerSecondJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (bentPercentage * conversionFactor));
+                fingerThirdJoints[fingerNumber].transform.localRotation = Quaternion.Euler(0, 0, (bentPercentage * conversionFactor));
             }
             else
             {
@@ -77,35 +76,6 @@ public class SerialConnection : MonoBehaviour
         else
         {
             Debug.LogWarning("Invalid bent percentage");
-        }
-    }
-    void FingerBend()
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            if (intData[i] < 4096 || intData[i] >= 0)
-            {
-                if (i == 4)
-                {
-                    fingerFirstJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor), 0, 0);
-                    fingerSecondJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor), 0, 0);
-                    fingerThirdJoints[i].transform.localRotation = Quaternion.Euler((float)(intData[i] / conversionFactor), 0, 0);
-                }
-                else if (i <= 3 || i >= 0)
-                {
-                    fingerFirstJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor));
-                    fingerSecondJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor));
-                    fingerThirdJoints[i].transform.localRotation = Quaternion.Euler(0, 0, (float)(intData[i] / conversionFactor));
-                }
-                else
-                {
-                    Debug.LogWarning("Invalid finger number");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("Invalid bent percentage");
-            }
         }
     }
     public void RecordCollision(int fingerNumber)
