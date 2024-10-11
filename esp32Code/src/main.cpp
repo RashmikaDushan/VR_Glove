@@ -16,10 +16,10 @@ float *rotation;
 #endif
 
 #if ACTIVATE_POTS
-Potentiometer indexFinger(34, "index", CALIBRATE_POTS);
-Potentiometer middleFinger(35, "middle", CALIBRATE_POTS);
-Potentiometer ringFinger(32, "ring", CALIBRATE_POTS);
-Potentiometer pinkyFinger(33, "pinky", CALIBRATE_POTS);
+Potentiometer indexFinger(33, "index", CALIBRATE_POTS);
+Potentiometer middleFinger(32, "middle", CALIBRATE_POTS);
+Potentiometer ringFinger(35, "ring", CALIBRATE_POTS);
+Potentiometer pinkyFinger(34, "pinky", CALIBRATE_POTS);
 float indexPercent, middlePercent, ringPercent, pinkyPercent;
 #endif
 
@@ -30,6 +30,7 @@ ServoMotor servo(18);
 void setup()
 {
   Serial.begin(115200);
+  delay(1000);
 
 #if ACTIVATE_IMU
   imu.begin();
@@ -60,7 +61,6 @@ void loop()
   middlePercent = middleFinger.readValue();
   ringPercent = ringFinger.readValue();
   pinkyPercent = pinkyFinger.readValue();
-  // Serial.print("Bent angle: ");
   Serial.print(",");
   Serial.print(indexPercent);
   Serial.print(",");
@@ -73,5 +73,5 @@ void loop()
   // int angle = map(potPercent, 0, 4095, 0, 180);
   // angle = 180 - angle;
   // servo.writeAngle(angle);
-  delay(2);
+  delay(10);
 }

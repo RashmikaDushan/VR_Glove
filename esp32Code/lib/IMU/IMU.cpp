@@ -10,14 +10,10 @@ void IMU::begin()
 {
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(100000);
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(400, true);
 #endif
-
-  Serial.begin(115200);
-  while (!Serial)
-    ;
 
   mpu.initialize();
   devStatus = mpu.dmpInitialize();
