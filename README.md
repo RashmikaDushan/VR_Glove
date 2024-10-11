@@ -2,47 +2,41 @@
 
 ## Project Overview
 
-This project aims to create a force feedback glove for enhanced virtual reality experiences. The initial prototype focuses on single finger tracking and force feedback using electrostatic braking technology.
+The Finger-Tracking Force-Feedback Glove is an innovative device aimed at enhancing the immersive experience of virtual reality (VR) by allowing users to physically interact with digital environments. This glove integrates precise finger-tracking and force-feedback technology to simulate resistance, creating a realistic and tactile virtual interaction. Its adaptable design makes it suitable for gaming, simulation, and training applications, enabling a new level of engagement in VR.
 
 ## Core Components
 
 1. ESP32 DevKit V1: Main microcontroller
 2. MPU6050: 6-axis gyroscope and accelerometer
-3. Electrostatic braking strips
+3. SG90 Servo motor
+4. Potentiometers
 
 ## Key Features
 
 ### 3D Hand Tracking
 
 The MPU6050 sensor provides 6 degrees of freedom (6DOF) motion tracking. This allows for:
-- Accurate hand position and orientation in 3D space
-- Real-time motion data for responsive VR interactions
+- Orientation in 3D space
 
 ![MPU6050](Images/MPU6050.jpeg)
 
 ### Finger Tracking
 
 Initially focusing on a single finger:
-- Flex sensors or the electrostatic brake strips itselves can be used for finger tracking
+- Potentiometers can be used for finger tracking
 
-### Electrostatic Braking for Force Feedback
+### Force Feedback
 
-Electrostatic braking strips are the core of the force feedback system:
-- Apply variable friction to finger movement
-- Create a sense of resistance when interacting with virtual objects
-
-![Electrostatic Brake](Images/brake.jpeg)
-
-#### How Electrostatic Braking Works
-
-Thin conductive strips are placed on adjacent surfaces. When a voltage is applied, an electrostatic force is generated between the strips. This force creates friction, resisting movement. Varying the voltage controls the strength of the braking effect. Enables simulation of different object shapes in VR
+SG90 servo motors are the core of the force feedback system:
+- Turn the arm to restrict the movement of the wheels which are attached to potentiometers
+- Create a sense of resistance to the fingers when interacting with virtual objects
 
 ### Communication
 
 The communication handles by the ESP32:
 - Receives tracking data from the MPU6050 via I2C protocol
 - Processes motion data and calculates required force feedback
-- Controls the voltage applied to electrostatic braking strips
-- Communicate with a computer via Bluetooth for integration with VR applications
+- Controls servos to restrict the 
+- Communicate with a computer via serial communication for integration with VR applications
 
 This project is in early development stages.
