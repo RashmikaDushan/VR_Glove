@@ -20,41 +20,42 @@ void IMU::begin()
   while (!Serial)
     ;
 
-  mpu.initialize();
-  devStatus = mpu.dmpInitialize();
+  this->mpu.initialize();
+  this->devStatus = this->mpu.dmpInitialize();
+  Serial.print(this->devStatus);
 
-  mpu.setDLPFMode(2);
+  this->mpu.setDLPFMode(2);
 
-  mpu.setXGyroOffset(220);
-  mpu.setYGyroOffset(76);
-  mpu.setZGyroOffset(-85);
-  mpu.setZAccelOffset(1788);
+  this->mpu.setXGyroOffset(220);
+  this->mpu.setYGyroOffset(76);
+  this->mpu.setZGyroOffset(-85);
+  this->mpu.setZAccelOffset(1788);
 
-  if (devStatus == 0)
+  if (this->devStatus == 0)
   {
-    mpu.CalibrateAccel(6);
-    mpu.CalibrateGyro(6);
-    mpu.setDMPEnabled(true);
-    dmpReady = true;
-    packetSize = mpu.dmpGetFIFOPacketSize();
+    this->mpu.CalibrateAccel(6);
+    this->mpu.CalibrateGyro(6);
+    this->mpu.setDMPEnabled(true);
+    this->dmpReady = true;
+    this->packetSize = this->mpu.dmpGetFIFOPacketSize();
   }
 }
 
 float *IMU::returnData(bool debug)
 {
-  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer))
+  if (this->mpu.dmpGetCurrentFIFOPacket(this->fifoBuffer))
   {
     // Display Euler angles in degrees
-    mpu.dmpGetQuaternion(&q, fifoBuffer);
-    // mpu.dmpGetGravity(&gravity, &q);
-    // mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    // ypr[0] = ypr[0] * 180 / M_PI;
-    // ypr[1] = ypr[1] * 180 / M_PI;
-    // ypr[2] = ypr[2] * 180 / M_PI;
+    this->mpu.dmpGetQuaternion(&this->q, this->fifoBuffer);
+    this->mpu.dmpGetGravity(&this->gravity, &this->q);
+    this->mpu.dmpGetYawPitchRoll(this->ypr, &this->q, &this->gravity);
+    this->ypr[0] = this->ypr[0] * 180 / M_PI;
+    this->ypr[1] = this->ypr[1] * 180 / M_PI;
+    this->ypr[2] = this->ypr[2] * 180 / M_PI;
     if (debug)
     {
-      // Serial.printf("IMU values: %.2f,%.2f,%.2f,%.2f || ", q[0], q[1], q[2], q[3]);
+      Serial.printf("IMU values: %.2f,%.2f,%.2f,%.2f || ", this->q.w, this->q.x, this->q.y, this->q.z);
     }
   }
-  return ypr;
+  return this->ypr;
 }

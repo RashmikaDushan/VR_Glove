@@ -22,10 +22,9 @@ private:
   VectorInt16 aaReal;
   VectorFloat gravity;
   float ypr[3] = {0, 0, 0};
-  // int16_t q[4] = {0, 0, 0, 0};
 
 public:
-  IMU(uint8_t address, void *wireObj);
+  IMU(uint8_t address = MPU6050_DEFAULT_ADDRESS, void *wireObj = 0);
   ~IMU();
   void begin();
   float *returnData(bool debug);

@@ -15,8 +15,11 @@
 TwoWire wire = TwoWire(0);
 TwoWire wire1 = TwoWire(1);
 IMU imu(0x68, &wire);
-IMU imu1(0x69, &wire1);
+IMU imu1(0x69, &wire);
+IMU imu2(0x68, &wire1);
 float *rotation;
+float *rotation1;
+float *rotation2;
 #endif
 
 #if ACTIVATE_POTS
@@ -33,11 +36,13 @@ ServoMotor servo(18);
 
 void setup()
 {
-  wire.begin(21, 22, 400000);
-  wire1.begin(16, 17, 400000);
   Serial.begin(115200);
 #if ACTIVATE_IMU
+  wire.begin(21, 22, 100000);
+  wire1.begin(16, 17, 100000);
   imu.begin();
+  imu1.begin();
+  imu2.begin();
 #endif
 
 #if ACTIVATE_POTS && CALLIBRATE_POTS
@@ -53,21 +58,29 @@ void loop()
 {
   Serial.println("");
 #if ACTIVATE_IMU
-  Serial.println("IMU 01 :");
-  rotation = imu.returnData(true);
+  Serial.print("IMU 01 : ");
+  rotation = imu.returnData(false);
   Serial.print(rotation[0]);
   Serial.print(" ");
   Serial.print(rotation[1]);
   Serial.print(" ");
   Serial.print(rotation[2]);
 
-  Serial.println("IMU 02 :");
-  rotation = imu1.returnData(true);
-  Serial.print(rotation[0]);
+  Serial.print(" |  IMU 02 : ");
+  rotation1 = imu1.returnData(false);
+  Serial.print(rotation1[0]);
   Serial.print(" ");
-  Serial.print(rotation[1]);
+  Serial.print(rotation1[1]);
   Serial.print(" ");
-  Serial.print(rotation[2]);
+  Serial.print(rotation1[2]);
+
+  Serial.print(" |  IMU 03 : ");
+  rotation2 = imu2.returnData(false);
+  Serial.print(rotation2[0]);
+  Serial.print(" ");
+  Serial.print(rotation2[1]);
+  Serial.print(" ");
+  Serial.print(rotation2[2]);
 #endif
 #if ACTIVATE_POTS
   indexPercent = indexFinger.readValue();
