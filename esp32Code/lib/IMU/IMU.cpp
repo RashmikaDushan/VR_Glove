@@ -1,6 +1,9 @@
 #include "IMU.h"
 
-IMU::IMU() {}
+IMU::IMU(uint8_t address, void *wireObj)
+{
+  this->mpu = MPU6050(address, wireObj);
+}
 
 IMU::~IMU()
 {
@@ -8,19 +11,24 @@ IMU::~IMU()
 
 void IMU::begin()
 {
-#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-  Wire.begin();
-  Wire.setClock(400000);
-#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-  Fastwire::setup(400, true);
-#endif
+  // #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+  // #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+  //   Fastwire::setup(400, true);
+  // #endif
 
-  Serial.begin(115200);
+  // Serial.begin(115200);
   while (!Serial)
     ;
 
   mpu.initialize();
   devStatus = mpu.dmpInitialize();
+
+  mpu.setDLPFMode(2);
+
+  mpu.setXGyroOffset(220);
+  mpu.setYGyroOffset(76);
+  mpu.setZGyroOffset(-85);
+  mpu.setZAccelOffset(1788);
 
   if (devStatus == 0)
   {
@@ -38,14 +46,14 @@ float *IMU::returnData(bool debug)
   {
     // Display Euler angles in degrees
     mpu.dmpGetQuaternion(&q, fifoBuffer);
-    mpu.dmpGetGravity(&gravity, &q);
-    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    ypr[0] = ypr[0] * 180 / M_PI;
-    ypr[1] = ypr[1] * 180 / M_PI;
-    ypr[2] = ypr[2] * 180 / M_PI;
+    // mpu.dmpGetGravity(&gravity, &q);
+    // mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    // ypr[0] = ypr[0] * 180 / M_PI;
+    // ypr[1] = ypr[1] * 180 / M_PI;
+    // ypr[2] = ypr[2] * 180 / M_PI;
     if (debug)
     {
-      Serial.printf("IMU values: %.2f,%.2f,%.2f || ", ypr[0], ypr[1], ypr[2]);
+      // Serial.printf("IMU values: %.2f,%.2f,%.2f,%.2f || ", q[0], q[1], q[2], q[3]);
     }
   }
   return ypr;

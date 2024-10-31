@@ -4,14 +4,18 @@
 #include <ESP32Servo.h>
 #include <ServoMotor.h>
 #include <IO.h>
+#include "Wire.h"
 
-#define ACTIVATE_POTS 1
+#define ACTIVATE_POTS 0
 #define ACTIVATE_IMU 1
 #define ACTIVATE_SERVO 0
 #define CALIBRATE_POTS 0
 
 #if ACTIVATE_IMU
-IMU imu;
+TwoWire wire = TwoWire(0);
+TwoWire wire1 = TwoWire(1);
+IMU imu(0x68, &wire);
+IMU imu1(0x69, &wire1);
 float *rotation;
 #endif
 
@@ -29,8 +33,9 @@ ServoMotor servo(18);
 
 void setup()
 {
+  wire.begin(21, 22, 400000);
+  wire1.begin(16, 17, 400000);
   Serial.begin(115200);
-
 #if ACTIVATE_IMU
   imu.begin();
 #endif
@@ -48,11 +53,20 @@ void loop()
 {
   Serial.println("");
 #if ACTIVATE_IMU
-  rotation = imu.returnData(false);
+  Serial.println("IMU 01 :");
+  rotation = imu.returnData(true);
   Serial.print(rotation[0]);
-  Serial.print(",");
+  Serial.print(" ");
   Serial.print(rotation[1]);
-  Serial.print(",");
+  Serial.print(" ");
+  Serial.print(rotation[2]);
+
+  Serial.println("IMU 02 :");
+  rotation = imu1.returnData(true);
+  Serial.print(rotation[0]);
+  Serial.print(" ");
+  Serial.print(rotation[1]);
+  Serial.print(" ");
   Serial.print(rotation[2]);
 #endif
 #if ACTIVATE_POTS
@@ -73,5 +87,5 @@ void loop()
   // int angle = map(potPercent, 0, 4095, 0, 180);
   // angle = 180 - angle;
   // servo.writeAngle(angle);
-  delay(2);
+  delay(10);
 }
