@@ -17,7 +17,7 @@ Potentiometer::Potentiometer(int potentiometerPin, String fingerName, bool calli
     this->pin = potentiometerPin;
     this->fingerName = fingerName;
     analogReadResolution(12);
-    pinMode(pin, INPUT);
+    pinMode(pin, INPUT_PULLDOWN);
 }
 
 Potentiometer::~Potentiometer()
