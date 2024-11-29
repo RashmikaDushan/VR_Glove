@@ -10,7 +10,7 @@ public class SerialConnection : MonoBehaviour
     private string receivedString; // Data received from the serial port
     private string sendString; // Data to be sent to the serial port
     private string[] stringData; // Received data as strings
-    private float[] floatData = new float[7] { 0, 0, 0, 0, 0, 0, 0}; // Recieved data as floats yaw,pitch,roll,index,middle,ring,pinky
+    private float[] floatData = new float[3] { 0, 0, 0}; // Recieved data as floats yaw,pitch,roll,index,middle,ring,pinky
     private float[] rotationOffset = new float[3] { 0, 0, 0};
     public TextMeshProUGUI onScreenText; // Text to display necessary data
     public GameObject[] fingerFirstJoints = new GameObject[5]; // Array of first joints of the fingers
@@ -38,10 +38,10 @@ public class SerialConnection : MonoBehaviour
         SerialCommunication();
         hand.transform.localEulerAngles = new Vector3(-floatData[1]-rotationOffset[0], floatData[0]-rotationOffset[1], -floatData[2]-rotationOffset[2]);
         // this.transform.localRotation = Quaternion.Euler(intData[0], intData[1], intData[2]);
-        FingerBend(0, floatData[3]);
-        FingerBend(1, floatData[4]);
-        FingerBend(2, floatData[5]);
-        FingerBend(3, floatData[6]);
+        FingerBend(0, index);
+        FingerBend(1, middle);
+        FingerBend(2, ring);
+        FingerBend(3, pinky);
         FingerBend(4, thumb);
         // FingerBend();
         // string arrayValues = string.Join(", ", fingerCollided);
@@ -111,5 +111,13 @@ public class SerialConnection : MonoBehaviour
                 onScreenText.text = "Error reading from serial port.";
             }
         }
+    }
+
+        public void resetTransform()
+    {
+        rotationOffset[0] = -floatData[2];
+        rotationOffset[1] = floatData[0];
+        rotationOffset[2] = floatData[1];
+        Debug.Log("Rotation Euler: " + string.Join(", ", rotationOffset)); // Debug log the converted floatData
     }
 }
