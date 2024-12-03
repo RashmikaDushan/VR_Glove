@@ -1031,9 +1031,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8262986618834487068}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.07185141, y: -0.24050796, z: 0, w: 0.9679842}
   m_LocalPosition: {x: 1.67, y: -1.6, z: -1.6}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.009999995, y: 0.00999999, z: 0.009999994}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5506376633097672462}
@@ -1071,11 +1071,15 @@ MonoBehaviour:
   - {fileID: 2943211487866670590}
   - {fileID: 647389564779204353}
   - {fileID: 8690828880583863393}
+  fingerCollidedDebug: 0000000000000000000000000000000000000000
   index: 0
   middle: 0
   ring: 0
   pinky: 0
   thumb: 0
+  palm: {fileID: 0}
+  forearm: {fileID: 0}
+  arm: {fileID: 0}
 --- !u!1 &8499193061140323315
 GameObject:
   m_ObjectHideFlags: 0
